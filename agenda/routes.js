@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const homeController = require('./src/controllers/home-controller');
-const testesController = require('./src/controllers/testes-controller');
+const HomeController = require('./src/controllers/HomeController');
+const LoginController = require('./src/controllers/LoginController');
 
-router.get("/", homeController.indexGet);
+router.get("/", new HomeController().index);
 
-router.get("/testes/:idUsuarios?/:parametro?", testesController.tests);
+router.get(["/login", "/login/index"], new LoginController().index);
 
-router.post("/", homeController.indexPost);
+router.post("/login/register", new LoginController().register);
 
 module.exports = router;
