@@ -15,12 +15,12 @@ class Login {
         this.user = null;
     }
 
-    validateFields() {
-        // clear();
-        // if (!validator.isEmail(this.body.email)) 
-        //     this.errors.push('E-mail inválido.');
-        // if (this.body.password.length < 3 || this.body.password.length > 50) 
-        //     this.errors.push('Senha deve ter entre 3 e 50 caracteres.');
+    valida() {
+        this.clear();
+        if (!validator.isEmail(this.body.email)) 
+            this.errors.push('E-mail inválido.');
+        if (this.body.password.length < 3 || this.body.password.length > 50) 
+            this.errors.push('Senha deve ter entre 3 e 50 caracteres.');
     }
 
     clear() {
@@ -35,7 +35,7 @@ class Login {
     }    
 
     register() {
-        validateFields();
+        this.valida();
         if (this.errors.length > 0) return;
     }
 }
