@@ -15,7 +15,7 @@ class Login {
         this.user = null;
     }
 
-    valida() {
+    validate() {
         this.clear();
         if (!validator.isEmail(this.body.email)) 
             this.errors.push('E-mail inválido.');
@@ -34,9 +34,15 @@ class Login {
         };
     }    
 
-    register() {
-        this.valida();
+    async register() {
+        this.validate();
         if (this.errors.length > 0) return;
+
+        try {
+            this.user = await model.create(this.body);
+        } catch(e) {
+            console.error(e);
+        }
     }
 }
 

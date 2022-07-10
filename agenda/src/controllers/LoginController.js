@@ -6,11 +6,27 @@ class LoginController {
         return res.render('login/index', { title: 'Login - Index'});
     }
 
-    static registerUser(req, res) {
-        let login = new Login(req.body);
-        login.register();
+    static async registerUser(req, res) {
+        try {
+            let login = new Login(req.body);
+            await login.register();
 
-        return res.send(login.errors);
+            if (login.errors.length > 0) {
+                req.flash('errors', login.errors);
+                req.session.save(() => {
+                    return res.redirect('/login');
+                });
+                return;
+            }
+
+            req.flash('success', "Usuário cadastrado com sucesso!");
+            req.session.save(() => {
+                return res.redirect('/login');
+            });
+        } catch(e) {
+            console.error(e);
+            return res.render('404');
+        }
     }
 }
 
