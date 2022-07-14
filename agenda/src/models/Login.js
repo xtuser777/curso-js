@@ -52,10 +52,23 @@ class Login {
         const salt = bcryptjs.genSaltSync();
         this.body.password = bcryptjs.hashSync(this.body.password, salt);
 
-        try {
-            this.user = await model.create(this.body);
-        } catch(e) {
-            console.error(e);
+        this.user = await model.create(this.body);
+    }
+
+    async authenticate() {
+        this.validate();
+        if (this.errors.length > 0) return;
+
+        this.user = await model.findOne({ email: this.body.email });
+        if (!this.user) {
+            this.errors.push('Usuário ainda não cadastrado.');
+            return;
+        }
+
+        if (!bcryptjs.compareSync(this.body.password, this.user.password)) {
+            this.errors.push('Senha inválida');
+            this.user = null;
+            return;
         }
     }
 }
