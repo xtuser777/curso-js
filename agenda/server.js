@@ -14,7 +14,7 @@ const app = express();
 
 mongoose.connect(process.env.CONNECTIONSTRING).then(() => app.emit('done')).catch((e) => console.log(e));
 
-app.use(helmet());
+//app.use(helmet());
 
 app.use(express.urlencoded({ extended: true }));
 
