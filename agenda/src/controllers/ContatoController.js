@@ -54,6 +54,20 @@ class ContatoController {
             return res.render('404');
         }
     }
+
+    static async deleteContact(req, res) {
+        if (!req.params.id) return res.render('404');
+        try {
+            const c = await Contato.delete(req.params.id);
+            if (!c) return res.render('404');
+
+            req.flash('success', 'Contato excluído com sucesso.');
+            req.session.save(() => res.redirect('/'));
+        } catch(e) {
+            console.error(e);
+            return res.render('404');
+        }
+    }
 }
 
 module.exports = ContatoController;

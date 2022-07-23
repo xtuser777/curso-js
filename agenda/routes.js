@@ -5,7 +5,7 @@ const HomeController = require('./src/controllers/HomeController');
 const LoginController = require('./src/controllers/LoginController');
 const { loginRequired } = require('./src/middlewares/middleware');
 
-router.get("/", new HomeController().index);
+router.get("/", HomeController.index);
 
 router.get(["/login", "/login/index"], LoginController.index);
 
@@ -19,8 +19,10 @@ router.get(["/contato", "/contato/index"], loginRequired, ContatoController.inde
 
 router.post("/contato/register", loginRequired, ContatoController.registerContact);
 
-router.get("/contato/:id", loginRequired, ContatoController.editIndex);
+router.get("/contato/:id", ContatoController.editIndex);
 
 router.post("/contato/edit/:id", loginRequired, ContatoController.editContact);
+
+router.get("/contato/delete/:id", loginRequired, ContatoController.deleteContact);
 
 module.exports = router;

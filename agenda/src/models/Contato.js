@@ -59,6 +59,16 @@ class Contato {
         if (this.errors.length > 0) return;
         this.contato = await model.findByIdAndUpdate(id, this.body, { new: true });
     }
+
+    static async get() {
+        return await model.find().sort({ criadoEm: -1 });
+    }
+
+    static async delete(id) {
+        if (typeof id !== "string") return;
+
+        return await model.findByIdAndDelete(id);
+    }
 }
 
 module.exports = Contato;

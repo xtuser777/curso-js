@@ -1,12 +1,12 @@
 const Home = require('../models/Home');
+const Contato = require('../models/Contato');
 
 class HomeController {
-    constructor() {
-        this.home = new Home();
-    }
 
-    index(req, res) {
-        return res.render('home/index', { title: 'Home - Index' });
+    static async index(req, res) {
+        const contatos = await Contato.get();
+     
+        return res.render('home/index', { title: 'Home - Index', contatos });
     }
 }
 
