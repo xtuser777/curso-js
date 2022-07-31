@@ -20,6 +20,10 @@ export default class Cadastro {
     }
 
     validate() {
+        for (let error of this.form.querySelectorAll('.error-text')) {
+            error.remove();
+        }
+
         let nome = this.form.querySelector('input[name="nome"]');
         let sobrenome = this.form.querySelector('input[name="sobrenome"]');
         let email = this.form.querySelector('input[name="email"]');
@@ -28,18 +32,28 @@ export default class Cadastro {
         let error = false;
 
         if (!nome.value) {
-            alert('O campo nome é obrigatório.');
+            this.addError(nome, 'O campo nome é obrigatório.');
             error = true;
         }
 
         if (email.value && !validator.isEmail(email.value)) {
-            alert('E-mail inválido.');
+            this.addError(email, 'E-mail inválido.');
             error = true;
         }
             
         if (!email.value && !telefone.value) {
-            alert('Ao menos um e-mail ou telefone deve ser informado.');
+            this.addError(email, 'Ao menos um e-mail ou telefone deve ser informado.');
+            this.addError(telefone, 'Ao menos um e-mail ou telefone deve ser informado.');
             error = true;
         }
+
+        if (!error) this.form.submit();
+    }
+
+    addError(field, msg) {
+        let div = document.createElement('div');
+        div.innerText = msg;
+        div.classList.add('error-text');
+        field.insertAdjacentElement('afterend', div);
     }
 }

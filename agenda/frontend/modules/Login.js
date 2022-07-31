@@ -20,21 +20,32 @@ export default class Login {
     }
 
     validate() {
+        for (let error of this.form.querySelectorAll('.error-text')) {
+            error.remove();
+        }
+
         let email = this.form.querySelector('input[name="email"]');
         let password = this.form.querySelector('input[name="password"]');
 
         let error = false;
 
         if (!validator.isEmail(email.value)) {
-            alert('E-mail inválido');
+            this.addError(email, 'E-mail inválido.');
             error = true;
         }
 
         if (password.value.length < 3 || password.value.length > 50) {
-            alert('A senha precisa ter entre 3 e 50 caracteres.');
+            this.addError(password, 'A senha precisa ter entre 3 e 50 caracteres.');
             error = true;
         }
 
         if (!error) this.form.submit();
+    }
+
+    addError(field, msg) {
+        let div = document.createElement('div');
+        div.innerText = msg;
+        div.classList.add('error-text');
+        field.insertAdjacentElement('afterend', div);
     }
 }
