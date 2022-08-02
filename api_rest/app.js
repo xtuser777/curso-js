@@ -1,3 +1,9 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+import './src/database/index';
+
 import express from 'express';
 import home from './src/routes/home';
 
