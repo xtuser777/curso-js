@@ -1,9 +1,17 @@
 import Aluno from '../models/Aluno';
+import Foto from '../models/Foto';
 
 class AlunoController {
   async index(req, res) {
     try {
-      return res.json(await Aluno.findAll());
+      return res.json(await Aluno.findAll({
+        attributes: ['id', 'nome', 'sobrenome', 'email', 'idade', 'peso', 'altura'],
+        order: [['id', 'DESC']],
+        include: {
+          model: Foto,
+          attributes: ['id', 'originalname', 'filename'],
+        },
+      }));
     } catch (e) {
       return res.status(400).json({ errors: e.errors.map((err) => err.message) });
     }
@@ -13,7 +21,14 @@ class AlunoController {
     try {
       if (!req.params.id) return res.status(400).json({ errors: ['Id não enviado.'] });
 
-      return res.json(await Aluno.findByPk(req.params.id));
+      return res.json(await Aluno.findByPk(req.params.id, {
+        attributes: ['id', 'nome', 'sobrenome', 'email', 'idade', 'peso', 'altura'],
+        order: [['id', 'DESC']],
+        include: {
+          model: Foto,
+          attributes: ['id', 'originalname', 'filename'],
+        },
+      }));
     } catch (e) {
       return res.status(400).json({ errors: e.errors.map((err) => err.message) });
     }
