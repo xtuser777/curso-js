@@ -9,7 +9,7 @@ class AlunoController {
         order: [['id', 'DESC']],
         include: {
           model: Foto,
-          attributes: ['id', 'originalname', 'filename'],
+          attributes: ['id', 'originalname', 'filename', 'url'],
         },
       }));
     } catch (e) {
