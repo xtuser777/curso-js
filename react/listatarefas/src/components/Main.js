@@ -8,11 +8,12 @@ export default class Main extends Component {
   state = {
     novaTarefa: '',
     tarefas: [],
+    index: -1,
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { tarefas } = this.state;
+    const { tarefas, index } = this.state;
     let { novaTarefa } = this.state;
     novaTarefa = novaTarefa.trim();
 
@@ -20,15 +21,45 @@ export default class Main extends Component {
 
     const novasTarefas = [...tarefas];
 
-    this.setState({
-      tarefas: [...novasTarefas, novaTarefa],
-    });
+    if (index === -1) {
+      this.setState({
+        tarefas: [...novasTarefas, novaTarefa],
+        novaTarefa: '',
+      });
+    } else {
+      novasTarefas[index] = novaTarefa;
+
+      this.setState({
+        tarefas: [...novasTarefas],
+        index: -1,
+        novaTarefa: '',
+      })
+    }
   }
 
   handleChange = (e) => {
     this.setState({
       novaTarefa: e.target.value,
     });
+  }
+
+  handleEdit = (e, index) => {
+    const { tarefas } = this.state;
+
+    this.setState({
+      index,
+      novaTarefa: tarefas[index],
+    })
+  }
+
+  handleDelete = (e, index) => {
+    const { tarefas } = this.state;
+    const novasTarefas = [...tarefas];
+    novasTarefas.splice(index, 1);
+
+    this.setState({
+      tarefas: [...novasTarefas],
+    })
   }
 
   render() {
@@ -46,12 +77,18 @@ export default class Main extends Component {
         </form>
 
         <ul className="tarefas">
-          {tarefas.map((tarefa) => (
+          {tarefas.map((tarefa, index) => (
             <li key={tarefa}>
               {tarefa}
               <span>
-                <FaEdit className="edit"/>
-                <FaWindowClose className="delete"/>
+                <FaEdit
+                  onClick={(e) => this.handleEdit(e, index)}
+                  className="edit"
+                />
+                <FaWindowClose
+                  onClick={(e) => this.handleDelete(e, index)}
+                  className="delete"
+                />
               </span>
             </li>
           ))}
