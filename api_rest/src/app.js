@@ -3,15 +3,29 @@ import { resolve } from 'path';
 
 dotenv.config();
 
-import './src/database/index';
+import './database/index';
 
 import express from 'express';
+import Cors from 'cors';
+import Helmet from 'helmet';
 
-import home from './src/routes/home';
-import user from './src/routes/user';
-import token from './src/routes/token';
-import aluno from './src/routes/aluno';
-import foto from './src/routes/foto';
+import home from './routes/home';
+import user from './routes/user';
+import token from './routes/token';
+import aluno from './routes/aluno';
+import foto from './routes/foto';
+
+const whiteList = [
+  'https://react2.otaviomiranda.com.br',
+  'http://localhost:3000',
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whiteList.indexOf(origin) !== -1 || !origin) callback(null, true);
+    else callback(new Error('Not allowed by CORS'));
+  },
+};
 
 class App {
   constructor() {
@@ -21,6 +35,8 @@ class App {
   }
 
   middlewares() {
+    this.app.use(Cors(corsOptions));
+    this.app.use(Helmet());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
     this.app.use(express.static(resolve(__dirname, 'uploads')));
