@@ -3,10 +3,10 @@ import * as actions from './actions';
 import * as types from '../types';
 
 const request = () =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     setTimeout(() => {
       resolve();
-    }, 3000);
+    }, 1500);
   });
 
 function* exampleRequest() {

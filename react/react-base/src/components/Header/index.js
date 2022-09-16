@@ -10,10 +10,10 @@ export default function Header() {
 
   return (
     <Nav>
-      <Link to="/" href="/">
+      <Link to="/">
         <FaHome size={24} />
       </Link>
-      <Link to="/login" href="/login">
+      <Link to="/login">
         <FaUserAlt size={24} />
       </Link>
       <Link to="/logout">
