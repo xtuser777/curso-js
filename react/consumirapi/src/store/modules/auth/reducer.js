@@ -11,9 +11,10 @@ const initialState = {
 export default function exampleReducer(state = initialState, action) {
   switch (action.type) {
     case types.LOGIN_SUCCESS: {
-      console.log('Success');
       const newState = { ...state };
-      newState.botaoClicado = !newState.botaoClicado;
+      newState.isLoggedIn = true;
+      newState.token = action.payload.token;
+      newState.user = action.payload.user;
       return newState;
     }
 
@@ -23,8 +24,8 @@ export default function exampleReducer(state = initialState, action) {
     }
 
     case types.LOGIN_FAILURE: {
-      console.log(' Deu erro...');
-      return state;
+      const newState = { ...initialState };
+      return newState;
     }
 
     default: {
