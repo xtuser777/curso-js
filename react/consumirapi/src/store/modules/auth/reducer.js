@@ -15,12 +15,14 @@ export default function exampleReducer(state = initialState, action) {
       newState.isLoggedIn = true;
       newState.token = action.payload.token;
       newState.user = action.payload.user;
+      newState.isLoading = false;
       return newState;
     }
 
     case types.LOGIN_REQUEST: {
-      console.log('REDUCER', action.payload);
-      return state;
+      const newState = { ...state };
+      newState.isLoading = true;
+      return newState;
     }
 
     case types.LOGIN_FAILURE: {
