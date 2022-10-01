@@ -40,7 +40,7 @@ export default function Register() {
       alert('E-mail inválido.');
     }
 
-    if (password.length < 6 || password.length > 50) {
+    if (!id && (password.length < 6 || password.length > 50)) {
       formErrors = true;
       alert('Senha deve ter entre 6 e 50 caracteres');
     }
