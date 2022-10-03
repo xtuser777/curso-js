@@ -37,7 +37,7 @@ export default function Register() {
 
     if (!isEmail(email)) {
       formErrors = true;
-      alert('E-mail inválido.');
+      alert('E-mail vazio ou inválido.');
     }
 
     if (!id && (password.length < 6 || password.length > 50)) {
