@@ -27,6 +27,7 @@ function persistRehydrate({ payload }) {
   axios.defaults.headers.Authorization = `Bearer ${token}`;
 }
 
+// eslint-disable-next-line consistent-return
 function* registerRequest({ payload }) {
   const { id, nome, email, password } = payload;
 
@@ -55,7 +56,13 @@ function* registerRequest({ payload }) {
     }
   } catch (e) {
     const errors = get(e, 'response.data.errors', []);
-    // const status = get(e, 'response.status', 0);
+    const status = get(e, 'response.status', 0);
+
+    if (status === 401) {
+      alert('Você precisa fazer login novamente.');
+      yield put(actions.loginFailure());
+      return history.push('/login');
+    }
 
     if (errors.length > 0) {
       errors.map((error) => alert(error));
