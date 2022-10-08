@@ -1,14 +1,19 @@
 import { get } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { isEmail, isInt, isFloat } from 'validator';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import { Container } from '../../styles/GlobalStyles';
 import { Form } from './styled';
 import Loading from '../../components/Loading';
 import axios from '../../services/axios';
 import history from '../../services/history';
+import * as actions from '../../store/modules/auth/actions';
 
 export default function Aluno({ match }) {
+  const dispatch = useDispatch();
+
   const id = get(match, 'params.id', 0);
 
   const [nome, setNome] = useState('');
@@ -29,6 +34,11 @@ export default function Aluno({ match }) {
         const Foto = get(data, 'Fotos[0].uri', '');
 
         setNome(data.nome);
+        setSobrenome(data.sobrenome);
+        setEmail(data.email);
+        setIdade(data.idade);
+        setPeso(data.peso);
+        setAltura(data.altura);
 
         setIsLoading(false);
       } catch (err) {
@@ -44,7 +54,7 @@ export default function Aluno({ match }) {
     getData();
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let formError = false;
 
@@ -76,6 +86,44 @@ export default function Aluno({ match }) {
     if (!isFloat(String(altura))) {
       formError = true;
       alert('Altura inválida.');
+    }
+
+    if (formError) return;
+
+    try {
+      setIsLoading(true);
+      if (id) {
+        await axios.put(`/alunos/${id}`, {
+          nome,
+          sobrenome,
+          email,
+          idade,
+          peso,
+          altura,
+        });
+        alert('Aluno(a) editado(a) com sucesso!');
+      } else {
+        const { data } = await axios.post(`/alunos`, {
+          nome,
+          sobrenome,
+          email,
+          idade,
+          peso,
+          altura,
+        });
+        alert('Aluno(a) criado(a) com sucesso!');
+        history.push(`/aluno/${data.id}/edit`);
+      }
+      setIsLoading(false);
+    } catch (err) {
+      const status = get(err, 'response.status', 0);
+      const data = get(err, 'response.data', {});
+      const errors = get(data, 'errors', []);
+
+      if (errors.length > 0) errors.map((error) => alert(error));
+      else alert('Erro desconhecido.');
+
+      if (status === 401) dispatch(actions.loginFailure());
     }
   };
 
